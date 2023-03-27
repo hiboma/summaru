@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "summaru"
+version = "0.1.0"
+description = ""
+authors = ["伊藤 洋也 <hiroyan@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-dotenv = "^1.0.0"
+slack-bolt = "^1.16.4"
+pyyaml = "^6.0"
+llama-index = "^0.4.40"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
