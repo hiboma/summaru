@@ -110,8 +110,10 @@ def handle_some_action(ack, body, event, say, logger):
     thread_ts  = body["container"]["thread_ts"]
 
     selected_type = body["state"]["values"][ Config.BLOCK_ID ][ Config.ACTION_ID ]["selected_option"]["value"]
-    query      = config.config["prompts"][selected_type]["query"]
+    query = config.config["prompts"][selected_type]["query"]
+    title = config.config["prompts"][selected_type]["title"]
 
+    say(text="<@{}> が `{}` を押したよ".format(body["user"]["id"], title), thread_ts=thread_ts)
     say(text=config.config["message"]["summarying"], thread_ts=thread_ts)
 
     summary = SummaruGPT().make_summary(channel_id=channel_id, thread_ts=thread_ts, query=query)
