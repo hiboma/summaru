@@ -24,3 +24,5 @@ jobs:
           poetry-version: ${{ matrix.poetry-version }}
       - name: View poetry --help
         run: poetry --help
+      - name: View poetry --help
+        run: poetry install
