@@ -30,3 +30,7 @@ jobs:
         with:
           push: false
           tags: summaru:latest
+      -
+        name: docker compose up
+        run: |
+          docker compose build
