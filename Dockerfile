@@ -1,5 +1,7 @@
 FROM python:3.11.2-slim
 
+LABEL org.opencontainers.image.source=https://github.com/hiboma/summaru/pulls
+
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 ENV POETRY_HOME=/usr/local/poetry
