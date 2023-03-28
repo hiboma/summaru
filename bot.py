@@ -47,10 +47,12 @@ def event_test(context, event, body, say, logger):
     event_test() は、アプリがメンションされたときに呼び出されます。
     """
 
-    command = re.sub(r'^<.*>\s+', '', event['text'])
+    text = re.sub(r'^<.*>\s+', '', event['text'])
+    logger.info(text)
+    command = re.split(r'\s+', text)
     logger.info(command)
 
-    if command == "summary":
+    if command[0] == "summary":
         if not event.get("thread_ts"):
             say(text=config.config['message']['not_thread'])
             logger.info("not thread")
@@ -58,17 +60,21 @@ def event_test(context, event, body, say, logger):
 
         say(text=config.config["message"]["summarying"], thread_ts=event['thread_ts'])
 
+        subcommand = "default"
+        if len(command) > 1:
+            subcommand = command[1]
+
         documents = SlackThreadReader().load_data(channel_id=event["channel"], ts=event["thread_ts"])
         index     = GPTSimpleVectorIndex(documents)
-        summary   = index.query(config.config["prompts"]["default"]["query"])
+        summary   = index.query(config.config["prompts"][ subcommand ]["query"])
 
         say(text=str(summary), thread_ts=event['thread_ts'])
 
-    elif command == "help":
+    elif command[0] == "help":
         with open("button.json", "r", encoding="utf8") as file:
             block = json.load(file)
             say(blocks=[block], text="Hey")
-    elif command == "s":
+    elif command[0] == "s":
 
         thread_replies = context.client.conversations_replies(
             channel=event['channel'],
