@@ -66,9 +66,10 @@ def event_test(context, event, body, say, logger):
         with open("components/button.json", "r", encoding="utf8") as file:
             block = json.load(file)
         say(blocks=[block], text="Hey")
-
     else:
-        say(text=config.config['message']['unknown_command'])
+        with open("components/button.json", "r", encoding="utf8") as file:
+            block = json.load(file)
+        say(blocks=[block], text=config.config["message"]["default"], thread_ts=event['thread_ts'])
 
 @app.action("button_click")
 def handle_some_action(ack, body, logger):

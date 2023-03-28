@@ -33,4 +33,5 @@ jobs:
       -
         name: docker compose up
         run: |
+          cp .env.sample .env
           docker compose build
