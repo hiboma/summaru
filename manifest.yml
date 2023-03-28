@@ -1,8 +1,8 @@
 display_information:
-  name: slack-summary-bot
+  name: summaru
 features:
   bot_user:
-    display_name: slack-summary-bot
+    display_name: summaru
     always_online: false
 oauth_config:
   scopes:
