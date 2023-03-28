@@ -21,6 +21,7 @@ from llama_index import GPTSimpleVectorIndex
 
 app = App(
     token=os.environ.get("SLACK_BOT_TOKEN"),
+    token_verification_enabled=False,
 )
 
 config =Config()
