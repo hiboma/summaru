@@ -4,39 +4,23 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "Pick an item from the dropdown list"
+				"text": "Pick an item from the summary types"
 			},
 			"accessory": {
 				"type": "static_select",
 				"placeholder": {
 					"type": "plain_text",
-					"text": "Select an item",
+					"text": "Summary types",
 					"emoji": true
 				},
 				"options": [
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "*this is plain_text text*",
+							"text": "simple summary",
 							"emoji": true
 						},
-						"value": "value-0"
-					},
-					{
-						"text": {
-							"type": "plain_text",
-							"text": "*this is plain_text text*",
-							"emoji": true
-						},
-						"value": "value-1"
-					},
-					{
-						"text": {
-							"type": "plain_text",
-							"text": "*this is plain_text text*",
-							"emoji": true
-						},
-						"value": "value-2"
+						"value": "default"
 					}
 				],
 				"action_id": "static_select-action"
