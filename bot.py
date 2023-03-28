@@ -17,7 +17,9 @@ from block_kit import BlockKit
 
 dotenv.load_dotenv()
 
-from llama_index import GPTSimpleVectorIndex
+from llama_index import GPTSimpleVectorIndex, LLMPredictor
+from langchain.chat_models import ChatOpenAI
+
 
 parser = OptionParser()
 parser.add_option("-d", "--debug",
@@ -121,10 +123,10 @@ class SummaruGPT:
     def make_summary(self, channel_id, thread_ts, query):
         """
         SlackThreadReader でスレッドのデータを取得し、GPTSimpleVectorIndex で要約を行う
-
         """
         documents = SlackThreadReader().load_data(channel_id=channel_id, thread_ts=thread_ts)
-        index = GPTSimpleVectorIndex(documents)
+        llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
+        index = GPTSimpleVectorIndex(documents, llm_predictor=llm_predictor)
         summary = index.query(query)
         return summary
 
