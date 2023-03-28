@@ -3,16 +3,19 @@ import time
 import logging
 import re
 
-logger = logging.getLogger(__name__)
-
 from llama_index import SlackReader
 from llama_index.readers.schema.base import Document
-
 from slack_sdk.errors import SlackApiError
+
+logger = logging.getLogger(__name__)
 
 class SlackThreadReader(SlackReader):
 
-    def _read_channel(self, channel_id: str, ts: str) -> str:
+    """
+    Slack のスレッドを読み込むクラスです。
+    """
+
+    def _read_channel(self, channel_id: str, thread_ts: str) -> str:
 
         texts: List[str] = []
         next_cursor = None
@@ -25,7 +28,7 @@ class SlackThreadReader(SlackReader):
                 result = self.client.conversations_replies(
                     channel=channel_id,
                     cursor=next_cursor,
-                    ts=ts,
+                    ts=thread_ts,
                     limit=1000,
                 )
 
@@ -56,6 +59,10 @@ class SlackThreadReader(SlackReader):
 
         return "\n\n".join(texts)
 
-    def load_data(self, channel_id: str, ts: str):
-        thread_messages = self._read_channel(channel_id, ts)
+    def load_data(self, channel_id: str, thread_ts: str):
+        """
+        channel_id: str
+        thread_ts: str
+        """
+        thread_messages = self._read_channel(channel_id, thread_ts)
         return [ Document(thread_messages, extra_info={"channel": channel_id}) ]
