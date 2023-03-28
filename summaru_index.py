@@ -38,6 +38,10 @@ class SlackThreadReader(SlackReader):
                 )
 
                 for message in result['messages']:
+                    if message.get("bot_id") is not None:
+                        print("bot message is ignored")
+                        continue
+
                     clean_text = re.sub(r'<@[\w\d]+>\s+', '', message['text'])
                     texts.append(clean_text)
 
