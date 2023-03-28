@@ -82,11 +82,11 @@ def handle_some_action(ack, body, event, say, logger):
 
     documents = SlackThreadReader().load_data(channel_id=channel_id, ts=thread_ts)
     index     = GPTSimpleVectorIndex(documents)
-    summary   = index.query(config.config["prompts"]["default"]["query"])
 
+    selected_type = body["state"]["values"][ Config.BLOCK_ID ][ Config.ACTION_ID ]["selected_option"]["value"]
+
+    summary = index.query(config.config["prompts"][selected_type]["query"])
     say(text=str(summary), thread_ts=thread_ts)
-
-    # print(body["state"]["values"])
 
 # Start your app
 if __name__ == "__main__":

@@ -6,6 +6,7 @@
 				"type": "mrkdwn",
 				"text": "Pick an item from the summary types"
 			},
+			"block_id": "summary_type",
 			"accessory": {
 				"type": "static_select",
 				"placeholder": {
