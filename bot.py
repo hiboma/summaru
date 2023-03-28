@@ -95,7 +95,9 @@ def handle_some_action(ack, body, event, say, logger):
     say(text=config.config["message"]["summarying"], thread_ts=thread_ts)
 
     documents = SlackThreadReader().load_data(channel_id=channel_id, ts=thread_ts)
-    index     = GPTSimpleVectorIndex(documents)
+    logger.info(documents)
+
+    index = GPTSimpleVectorIndex(documents)
 
     selected_type = body["state"]["values"][ Config.BLOCK_ID ][ Config.ACTION_ID ]["selected_option"]["value"]
 
