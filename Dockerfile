@@ -19,10 +19,13 @@ RUN pip install --upgrade pip
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain ${RUST_VERSION}
 RUN rustup install stable
 
-WORKDIR                /app
+WORKDIR               /app
 COPY pyproject.toml   /app/pyproject.toml
 COPY poetry.lock      /app/poetry.lock
+
 COPY summaru_index.py /app/summaru_index.py
+COPY bot.py           /app/bot.py
+COPY config.py        /app/config.py
 
 RUN poetry config cache-dir /app/.cache
 RUN poetry config virtualenvs.in-project true
