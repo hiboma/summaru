@@ -8,5 +8,11 @@ message:
 
 prompts:
   default:
+    title: "簡単な要約"
     query: |-
       このテキストの要約を作ってください。日本語でお願いします
+
+  test:
+    title: "感想を書いて"
+    query: |-
+      この文章を読んで、感想を書いてください

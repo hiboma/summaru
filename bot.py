@@ -13,6 +13,7 @@ from optparse import OptionParser
 
 from summaru_index import SlackThreadReader
 from config import Config
+from block_kit import BlockKit
 
 dotenv.load_dotenv()
 
@@ -81,9 +82,7 @@ def event_test(context, event, body, say, logger):
             block = json.load(file)
         say(blocks=[block], text="Hey")
     else:
-        with open("components/menu.json", "r", encoding="utf8") as file:
-            block = json.load(file)
-        say(blocks=block["blocks"], text=config.config["message"]["default"], thread_ts=event['thread_ts'])
+        say(blocks=BlockKit().blocks(), text=config.config["message"]["default"], thread_ts=event['thread_ts'])
 
 @app.action("static_select-action")
 def handle_some_action(ack, body, event, say, logger):

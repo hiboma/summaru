@@ -14,16 +14,7 @@
 					"text": "Summary types",
 					"emoji": true
 				},
-				"options": [
-					{
-						"text": {
-							"type": "plain_text",
-							"text": "simple summary",
-							"emoji": true
-						},
-						"value": "default"
-					}
-				],
+				"options": [],
 				"action_id": "static_select-action"
 			}
 		}
