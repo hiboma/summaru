@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  summaru:
+    env_file: .env
+    build:
+      context: .
+    volumes:
+      - ./config.yaml:/app/config.yaml
+    command: poetry run python bot.py
