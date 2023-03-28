@@ -23,15 +23,16 @@ WORKDIR               /app
 COPY pyproject.toml   /app/pyproject.toml
 COPY poetry.lock      /app/poetry.lock
 
-COPY summaru_index.py /app/summaru_index.py
-COPY bot.py           /app/bot.py
-COPY config.py        /app/config.py
-COPY components       /app/components
-
 RUN poetry config cache-dir /app/.cache
 RUN poetry config virtualenvs.in-project true
 RUN poetry install --no-interaction --no-root
 RUN poetry config --list
-RUN mkdir data
+
+COPY summaru_index.py /app/summaru_index.py
+COPY bot.py           /app/bot.py
+COPY config.py        /app/config.py
+COPY components       /app/components
+COPY tests            /app/tests
+COPY block_kit.py     /app/block_kit.py
 
 ENTRYPOINT ["poetry", "run"]
