@@ -1,7 +1,7 @@
 ---
 message:
   summarying: "ちょっと待ってね。考え中です...🍵"
-  not_thread: ":warning: サマリ機能はスレッド内でのみサポートされています"
+  not_thread: ":warning: サマリ機能はスレッド内でのみサポートされています。スレッドで呼び出してね"
   unknown_command: "すいません コマンドがよくわかりませんでした"
   help: "help"
   default: "はい、なんでしょうか?"
