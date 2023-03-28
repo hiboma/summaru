@@ -12,3 +12,7 @@ watch:
 
 docker/up:
 	docker compose up --build
+
+docker/test:
+	docker compose build
+	docker compose run summaru pytest
