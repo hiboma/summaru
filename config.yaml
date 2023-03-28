@@ -1,0 +1,10 @@
+---
+message:
+  summarying: "ちょっと待ってね。考え中です...🍵"
+  not_thread: ":warning: サマリ機能はスレッド内でのみサポートされています"
+  unknown_command: "すいません コマンドがよくわかりませんでした"
+  help: "help"
+
+prompts:
+  default:
+    query: "このテキストの要約を作ってください。日本語でお願いします。"
