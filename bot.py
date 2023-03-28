@@ -10,7 +10,7 @@ import dotenv
 from optparse import OptionParser
 
 
-
+from help import Help
 from summaru_index import SlackThreadReader
 from config import Config
 from block_kit import BlockKit
@@ -70,17 +70,15 @@ def event_test(context, event, body, say, logger):
         say(text=config.config["message"]["summarying"], thread_ts=event['thread_ts'])
 
         channel_id = event["channel"]
-        thread_ts = event["thread_ts"]
+        thread_ts  = event["thread_ts"]
         query = config.config["prompts"][ subcommand ]["query"]
 
         summary = SummaruGPT().make_summary(channel_id=channel_id, thread_ts=thread_ts, query=query)
 
         say(text=str(summary), thread_ts=event['thread_ts'])
-
     elif command[0] == "help":
-        with open("button.json", "r", encoding="utf8") as file:
-            block = json.load(file)
-            say(blocks=[block], text="Hey")
+        thread_ts = event.get("thread_ts")
+        say(text=Help().help_text(), thread_ts=thread_ts)
     elif command[0] == "s":
 
         thread_replies = context.client.conversations_replies(

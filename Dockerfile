@@ -34,5 +34,6 @@ COPY config.py        /app/config.py
 COPY components       /app/components
 COPY tests            /app/tests
 COPY block_kit.py     /app/block_kit.py
+COPY help.py          /app/help.py
 
 ENTRYPOINT ["poetry", "run"]
