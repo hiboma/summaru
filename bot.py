@@ -82,6 +82,11 @@ def event_test(context, event, body, say, logger):
             block = json.load(file)
         say(blocks=[block], text="Hey")
     else:
+        if not event.get("thread_ts"):
+            say(text=config.config['message']['not_thread'])
+            logger.info("not thread")
+            return
+
         say(blocks=BlockKit().blocks(), text=config.config["message"]["default"], thread_ts=event['thread_ts'])
 
 @app.action("static_select-action")
