@@ -58,11 +58,16 @@ def event_test(context, event, body, say, logger):
             logger.info("not thread")
             return
 
-        say(text=config.config["message"]["summarying"], thread_ts=event['thread_ts'])
-
         subcommand = "default"
         if len(command) > 1:
             subcommand = command[1]
+
+        if config.config["prompts"].get(subcommand) is None:
+            say(text=config.config['message']['subcommand_not_found'], thread_ts=event['thread_ts'])
+            logger.info("subcommand not found")
+            return
+
+        say(text=config.config["message"]["summarying"], thread_ts=event['thread_ts'])
 
         documents = SlackThreadReader().load_data(channel_id=event["channel"], ts=event["thread_ts"])
         index     = GPTSimpleVectorIndex(documents)
