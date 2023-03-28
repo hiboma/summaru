@@ -4,13 +4,13 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "Test block with multi static select"
+				"text": "Pick an item from the dropdown list"
 			},
 			"accessory": {
-				"type": "multi_static_select",
+				"type": "static_select",
 				"placeholder": {
 					"type": "plain_text",
-					"text": "Select options",
+					"text": "Select an item",
 					"emoji": true
 				},
 				"options": [
@@ -39,7 +39,7 @@
 						"value": "value-2"
 					}
 				],
-				"action_id": "multi_static_select-action"
+				"action_id": "static_select-action"
 			}
 		}
 	]

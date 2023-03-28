@@ -67,17 +67,26 @@ def event_test(context, event, body, say, logger):
             block = json.load(file)
         say(blocks=[block], text="Hey")
     else:
-        with open("components/button.json", "r", encoding="utf8") as file:
+        with open("components/menu.json", "r", encoding="utf8") as file:
             block = json.load(file)
-        say(blocks=[block], text=config.config["message"]["default"], thread_ts=event['thread_ts'])
+        say(blocks=block["blocks"], text=config.config["message"]["default"], thread_ts=event['thread_ts'])
 
-@app.action("button_click")
-def handle_some_action(ack, body, logger):
-    """
-    handle_some_action() は、ボタンがクリックされたときに呼び出されます。
-    """
+@app.action("static_select-action")
+def handle_some_action(ack, body, event, say, logger):
     ack()
-    logger.info(body)
+
+    channel_id = body["container"]["channel_id"]
+    thread_ts  = body["container"]["thread_ts"]
+
+    say(text=config.config["message"]["summarying"], thread_ts=thread_ts)
+
+    documents = SlackThreadReader().load_data(channel_id=channel_id, ts=thread_ts)
+    index     = GPTSimpleVectorIndex(documents)
+    summary   = index.query(config.config["prompts"]["default"]["query"])
+
+    say(text=str(summary), thread_ts=thread_ts)
+
+    # print(body["state"]["values"])
 
 # Start your app
 if __name__ == "__main__":
