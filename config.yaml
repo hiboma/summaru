@@ -4,6 +4,7 @@ message:
   not_thread: ":warning: サマリ機能はスレッド内でのみサポートされています"
   unknown_command: "すいません コマンドがよくわかりませんでした"
   help: "help"
+  default: "はい、なんでしょうか?"
 
 prompts:
   default:

@@ -30,3 +30,8 @@ jobs:
         with:
           push: false
           tags: summaru:latest
+      -
+        name: docker compose up
+        run: |
+          cp .env.sample .env
+          docker compose build
