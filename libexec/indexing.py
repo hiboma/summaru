@@ -18,7 +18,7 @@ from slack_sdk.errors import SlackApiError
 channel_id = "CHYATF79T"
 ts = "1679972008.862549"
 
-documents = SlackThreadReader().load_data(channel_id=channel_id, ts=ts)
+documents = SlackThreadReader().load_data(channel_id=channel_id, thread_ts=ts)
 index      = GPTSimpleVectorIndex(documents=documents)
 summary    = index.query("テキストの要約をしてください")
 
