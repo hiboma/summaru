@@ -7,17 +7,31 @@ import re
 import json
 import yaml
 import dotenv
+from optparse import OptionParser
+
+
 
 from summaru_index import SlackThreadReader
-
-from slack_bolt import App
-from slack_bolt.adapter.socket_mode import SocketModeHandler
 from config import Config
 
-logging.basicConfig(level=logging.INFO)
 dotenv.load_dotenv()
 
 from llama_index import GPTSimpleVectorIndex
+
+parser = OptionParser()
+parser.add_option("-d", "--debug",
+                  action="store_true", dest="debug", default=False,
+                  help="debug output")
+
+(options, args) = parser.parse_args()
+
+if options.debug:
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.INFO)
+
+from slack_bolt import App
+from slack_bolt.adapter.socket_mode import SocketModeHandler
 
 app = App(
     token=os.environ.get("SLACK_BOT_TOKEN"),
