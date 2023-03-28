@@ -69,9 +69,11 @@ def event_test(context, event, body, say, logger):
 
         say(text=config.config["message"]["summarying"], thread_ts=event['thread_ts'])
 
-        documents = SlackThreadReader().load_data(channel_id=event["channel"], ts=event["thread_ts"])
-        index     = GPTSimpleVectorIndex(documents)
-        summary   = index.query(config.config["prompts"][ subcommand ]["query"])
+        channel_id = event["channel"]
+        thread_ts = event["thread_ts"]
+        query = config.config["prompts"][ subcommand ]["query"]
+
+        summary = SummaruGPT().make_summary(channel_id=channel_id, thread_ts=thread_ts, query=query)
 
         say(text=str(summary), thread_ts=event['thread_ts'])
 
@@ -107,17 +109,26 @@ def handle_some_action(ack, body, event, say, logger):
     channel_id = body["container"]["channel_id"]
     thread_ts  = body["container"]["thread_ts"]
 
+    selected_type = body["state"]["values"][ Config.BLOCK_ID ][ Config.ACTION_ID ]["selected_option"]["value"]
+    query      = config.config["prompts"][selected_type]["query"]
+
     say(text=config.config["message"]["summarying"], thread_ts=thread_ts)
 
-    documents = SlackThreadReader().load_data(channel_id=channel_id, ts=thread_ts)
-    logger.info(documents)
-
-    index = GPTSimpleVectorIndex(documents)
-
-    selected_type = body["state"]["values"][ Config.BLOCK_ID ][ Config.ACTION_ID ]["selected_option"]["value"]
-
-    summary = index.query(config.config["prompts"][selected_type]["query"])
+    summary = SummaruGPT().make_summary(channel_id=channel_id, thread_ts=thread_ts, query=query)
     say(text=str(summary), thread_ts=thread_ts)
+
+
+class SummaruGPT:
+
+    def make_summary(self, channel_id, thread_ts, query):
+        """
+        SlackThreadReader でスレッドのデータを取得し、GPTSimpleVectorIndex で要約を行う
+
+        """
+        documents = SlackThreadReader().load_data(channel_id=channel_id, thread_ts=thread_ts)
+        index = GPTSimpleVectorIndex(documents)
+        summary = index.query(query)
+        return summary
 
 # Start your app
 if __name__ == "__main__":
