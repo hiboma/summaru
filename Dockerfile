@@ -26,6 +26,7 @@ COPY poetry.lock      /app/poetry.lock
 COPY summaru_index.py /app/summaru_index.py
 COPY bot.py           /app/bot.py
 COPY config.py        /app/config.py
+COPY components       /app/components
 
 RUN poetry config cache-dir /app/.cache
 RUN poetry config virtualenvs.in-project true
