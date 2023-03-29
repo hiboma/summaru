@@ -9,3 +9,4 @@ behavior:
   unknown_command: "すいません コマンドがよくわかりませんでした"
   help: "スレッドで以下のコマンドを呼び出してください"
   default: "はい、なんでしょうか?"
+  free_prompt: "プロンプトを自分で書く"

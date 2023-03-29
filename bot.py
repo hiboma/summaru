@@ -81,6 +81,35 @@ def event_test(context, event, say, logger):
 
         say(blocks=blocks, text=text, thread_ts=thread_ts)
 
+@app.view("")
+def handle_view_submission_events(ack, context, body, logger):
+    logger.info(body)
+
+    ack()
+
+    query = body["view"]["state"]["values"][ Config.BLOCK_ID ]["plain_text_input-action"]["value"]
+    channel_id, thread_ts = body["view"]["private_metadata"].split("/")
+    bot_user_id           = context["bot_user_id"]
+
+    context.client.chat_postMessage(
+        channel=channel_id,
+        text="execute free prompt ...\n```\n{}\n```".format(query),
+        thread_ts=thread_ts
+    )
+
+    gpt = SummaruGPT(bot_user_id=bot_user_id)
+    summary = gpt.make_summary(
+        channel_id=channel_id,
+        thread_ts=thread_ts,
+        query=query
+    )
+    context.client.chat_postMessage(
+        channel=channel_id,
+        text=str(summary),
+        thread_ts=thread_ts
+    )
+
+
 @app.action("static_select-action")
 def handle_some_action(ack, context, body, say, logger):
     logger.info(body)
@@ -94,6 +123,14 @@ def handle_some_action(ack, context, body, say, logger):
 
     # dict is deep ...
     selected_type = body["state"]["values"][ Config.BLOCK_ID ][ Config.ACTION_ID ]["selected_option"]["value"]
+
+    if selected_type == "free-prompt":
+        private_metadata = "{}/{}".format(channel_id, thread_ts)
+        modal = BlockKit().modal_template()
+        modal["private_metadata"] = private_metadata
+        response = context.client.views_open(trigger_id=body["trigger_id"], view=modal)
+        print(response)
+        return
 
     # user prompt
     if re.match(r'\AUSER-', selected_type):
