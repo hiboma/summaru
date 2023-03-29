@@ -23,7 +23,7 @@ class Help:
         help_text += "```"
         for name, prompt in self.config.shared_prompts().items():
             help_text += "#{}\n".format(prompt["title"])
-            help_text += "@summaru summary {}\n\n".format(name)
+            help_text += "@summaru prompt {}\n\n".format(name)
 
         help_text += "@summaru help\n"
         help_text += "```"

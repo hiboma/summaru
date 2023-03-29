@@ -19,6 +19,8 @@ class BlockKit:
         with open("components/menu.json", "r", encoding="utf8") as file:
             self.block = json.load(file)
 
+        self.block["blocks"][0]["text"]["text"] = self.config.behavior()["menu"]
+
     def build_shared_prompts(self):
         """
         shared prompts を追加します。

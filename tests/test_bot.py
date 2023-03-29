@@ -10,6 +10,7 @@ import bot
 from block_kit import BlockKit
 from help import Help
 from config import Config
+from summaru_gpt import SummaruGPT
 
 def test_json():
   with open("components/menu.json", "r", encoding="utf8") as file:
@@ -32,6 +33,11 @@ def test_help_text():
     assert Help().help_text().find("help")
     assert Help().help_text().find("@summaru summary summary")
     assert Help().help_text().find("@summaru summary kanso")
+
+def test_summaru_gpt():
+    gpt = SummaruGPT(bot_user_id="test")
+    assert gpt
+    assert gpt.llm_predictor()
 
 def test_load_bot():
   assert True, 'only load test'
