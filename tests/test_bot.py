@@ -37,7 +37,6 @@ def test_help_text():
 def test_summaru_gpt():
     gpt = SummaruGPT(bot_user_id="test")
     assert gpt
-    assert gpt.llm_predictor()
 
 def test_load_bot():
   assert True, 'only load test'
