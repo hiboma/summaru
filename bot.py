@@ -74,8 +74,10 @@ def event_test(context, event, body, say, logger):
         channel_id = event["channel"]
         thread_ts  = event["thread_ts"]
         query = config.config["prompts"][ subcommand ]["query"]
+        bot_user_id = context["bot_user_id"]
 
-        summary = SummaruGPT().make_summary(channel_id=channel_id, thread_ts=thread_ts, query=query)
+        gpt = SummaruGPT(bot_user_id=bot_user_id)
+        summary = gpt.make_summary(channel_id=channel_id, thread_ts=thread_ts, query=query)
 
         say(text=str(summary), thread_ts=event['thread_ts'])
     elif command[0] == "help":
@@ -93,11 +95,12 @@ def event_test(context, event, body, say, logger):
         say(blocks=BlockKit().blocks(), text=config.config["message"]["default"], thread_ts=event['thread_ts'])
 
 @app.action("static_select-action")
-def handle_some_action(ack, body, event, say, logger):
+def handle_some_action(ack, context, body, say, logger):
     ack()
 
     channel_id = body["container"]["channel_id"]
     thread_ts  = body["container"]["thread_ts"]
+    bot_user_id = context["bot_user_id"]
 
     selected_type = body["state"]["values"][ Config.BLOCK_ID ][ Config.ACTION_ID ]["selected_option"]["value"]
     query = config.config["prompts"][selected_type]["query"]
@@ -106,17 +109,22 @@ def handle_some_action(ack, body, event, say, logger):
     say(text="<@{}> が `{}` を押したよ".format(body["user"]["id"], title), thread_ts=thread_ts)
     say(text=config.config["message"]["summarying"], thread_ts=thread_ts)
 
-    summary = SummaruGPT().make_summary(channel_id=channel_id, thread_ts=thread_ts, query=query)
+    gpt = SummaruGPT(bot_user_id=bot_user_id)
+    summary = gpt.make_summary(channel_id=channel_id, thread_ts=thread_ts, query=query)
+
     say(text=str(summary), thread_ts=thread_ts)
 
 
 class SummaruGPT:
 
+    def __init__(self, bot_user_id):
+        self.bot_user_id = bot_user_id
+
     def make_summary(self, channel_id, thread_ts, query):
         """
         SlackThreadReader でスレッドのデータを取得し、GPTSimpleVectorIndex で要約を行う
         """
-        documents = SlackThreadReader().load_data(channel_id=channel_id, thread_ts=thread_ts)
+        documents = SlackThreadReader(bot_user_id=self.bot_user_id).load_data(channel_id=channel_id, thread_ts=thread_ts)
         llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
         index = GPTSimpleVectorIndex(documents, llm_predictor=llm_predictor)
         summary = index.query(query)

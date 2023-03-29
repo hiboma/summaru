@@ -1,19 +1,30 @@
-from typing import List, Optional
 import time
 import logging
 import re
+import os
 
-from llama_index import SlackReader
-from llama_index.readers.schema.base import Document
+from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
+from llama_index.readers.schema.base import Document
 
 logger = logging.getLogger(__name__)
 
-class SlackThreadReader(SlackReader):
+class SlackThreadReader:
 
     """
     Slack のスレッドを読み込むクラスです。
     """
+
+    def __init__(self, bot_user_id) -> None:
+        self.bot_user_id = bot_user_id
+
+        slack_token = os.environ["SLACK_BOT_TOKEN"]
+        if slack_token is None:
+            raise ValueError(
+                "Must specify `slack_token` or set environment "
+                "variable `SLACK_BOT_TOKEN`."
+            )
+        self.client = WebClient(token=slack_token)
 
     def _read_channel(self, channel_id: str, thread_ts: str) -> str:
 
@@ -32,15 +43,15 @@ class SlackThreadReader(SlackReader):
                     limit=1000,
                 )
 
-                # Print results
                 logger.info(
                     "{} messages found in {}".format(len(result["messages"]), id)
                 )
 
                 for message in result['messages']:
-                    if message.get("bot_id") is not None:
-                        print("bot message is ignored")
-                        continue
+                    # ignore message from summaru
+                    if message["user"] == self.bot_user_id:
+                       logger.info("summaru message is ignored!")
+                       continue
 
                     clean_text = re.sub(r'<@[\w\d]+>\s+', '', message['text'])
                     texts.append(clean_text)
