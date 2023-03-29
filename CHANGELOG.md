@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.0.8](https://github.com/hiboma/summaru/compare/v0.0.7...v0.0.8) (2023-03-29)
+
+
 ## [v0.0.7](https://github.com/hiboma/summaru/compare/v0.0.6...v0.0.7) (2023-03-29)
 
 
