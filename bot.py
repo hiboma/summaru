@@ -49,32 +49,33 @@ def event_test(context, event, body, say, logger):
     event_test() は、アプリがメンションされたときに呼び出されます。
     """
 
-    text = re.sub(r'^<.*>\s+', '', event['text'])
-    logger.info(text)
+    text    = re.sub(r'^<.*>\s+', '', event['text'])
     command = re.split(r'\s+', text)
-    logger.info(command)
+
+    logger.info(event)
+    logger.info("text: {}".format(text))
+    logger.info("command: {}".format(command))
 
     if command[0] == "summary":
         if not event.get("thread_ts"):
-            say(text=config.config['message']['not_thread'])
-            logger.info("not thread")
+            say(text=config.behavior()['not_thread'])
             return
 
         subcommand = "default"
         if len(command) > 1:
             subcommand = command[1]
 
-        if config.config["prompts"].get(subcommand) is None:
-            say(text=config.config['message']['subcommand_not_found'], thread_ts=event['thread_ts'])
+        if config.prompts().get(subcommand) is None:
+            say(text=config.behavior()['subcommand_not_found'], thread_ts=event['thread_ts'])
             logger.info("subcommand not found")
             return
 
-        say(text=config.config["message"]["summarying"], thread_ts=event['thread_ts'])
+        say(text=config.behavior()["summarying"], thread_ts=event['thread_ts'])
 
-        channel_id = event["channel"]
-        thread_ts  = event["thread_ts"]
-        query = config.config["prompts"][ subcommand ]["query"]
+        channel_id  = event["channel"]
+        thread_ts   = event["thread_ts"]
         bot_user_id = context["bot_user_id"]
+        query       = config.behavior()[ subcommand ]["query"]
 
         gpt = SummaruGPT(bot_user_id=bot_user_id)
         summary = gpt.make_summary(channel_id=channel_id, thread_ts=thread_ts, query=query)
@@ -88,28 +89,29 @@ def event_test(context, event, body, say, logger):
         pdb.set_trace()
     else:
         if not event.get("thread_ts"):
-            say(text=config.config['message']['not_thread'])
+            say(text=config.behavior()['not_thread'])
             logger.info("not thread")
             return
 
-        say(blocks=BlockKit().blocks(), text=config.config["message"]["default"], thread_ts=event['thread_ts'])
+        say(blocks=BlockKit().blocks(), text=config.behavior()["default"], thread_ts=event['thread_ts'])
 
 @app.action("static_select-action")
 def handle_some_action(ack, context, body, say, logger):
+    logger.info(body)
     ack()
 
-    channel_id = body["container"]["channel_id"]
-    thread_ts  = body["container"]["thread_ts"]
+    channel_id  = body["container"]["channel_id"]
+    thread_ts   = body["container"]["thread_ts"]
     bot_user_id = context["bot_user_id"]
 
     selected_type = body["state"]["values"][ Config.BLOCK_ID ][ Config.ACTION_ID ]["selected_option"]["value"]
-    query = config.config["prompts"][selected_type]["query"]
-    title = config.config["prompts"][selected_type]["title"]
+    query = config.prompts()[selected_type]["query"]
+    title = config.prompts()[selected_type]["title"]
 
     say(text="<@{}> が `{}` を押したよ".format(body["user"]["id"], title), thread_ts=thread_ts)
-    say(text=config.config["message"]["summarying"], thread_ts=thread_ts)
+    say(text=config.behavior()["summarying"], thread_ts=thread_ts)
 
-    gpt = SummaruGPT(bot_user_id=bot_user_id)
+    gpt     = SummaruGPT(bot_user_id=bot_user_id)
     summary = gpt.make_summary(channel_id=channel_id, thread_ts=thread_ts, query=query)
 
     say(text=str(summary), thread_ts=thread_ts)

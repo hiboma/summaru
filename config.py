@@ -10,11 +10,13 @@ class Config:
 
     def __init__(self):
         with open('config.yaml', encoding="utf8") as file:
-            self.config = yaml.safe_load(file)
+            self._config = yaml.safe_load(file)
 
-    def reload(self):
-        """
-        _summary_config() は、config.yaml を再読み込みします。
-        """
-        with open('config.yaml', encoding="utf8") as file:
-            self.config = yaml.safe_load(file)
+        with open('prompt.yaml', encoding="utf8") as file:
+            self._prompt = yaml.safe_load(file)
+
+    def behavior(self):
+        return self._config.get("behavior")
+
+    def prompts(self):
+        return self._prompt.get("prompts")

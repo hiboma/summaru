@@ -50,7 +50,7 @@ class SlackThreadReader:
                 for message in result['messages']:
                     # ignore message from summaru
                     if message["user"] == self.bot_user_id:
-                       logger.info("summaru message is ignored!")
+                       logger.info("summaru message is ignored: {}".format(message["text"]))
                        continue
 
                     clean_text = re.sub(r'<@[\w\d]+>\s+', '', message['text'])

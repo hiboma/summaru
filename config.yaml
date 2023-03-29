@@ -1,19 +1,8 @@
 ---
-message:
+behavior:
   subcommand_not_found: "サブコマンドが見つかりませんでした。"
   summarying: "ちょっと待ってね。考え中です...🍵"
-  not_thread: ":warning: サマリ機能はスレッド内でのみサポートされています。スレッドで呼び出してね"
+  not_thread: ":warning: @summaru の呼び出しはスレッド内のみサポートされています。スレッドで呼び出してね!"
   unknown_command: "すいません コマンドがよくわかりませんでした"
   help: "スレッドで以下のコマンドを呼び出してください"
   default: "はい、なんでしょうか?"
-
-prompts:
-  summary:
-    title: "要約を書いて"
-    query: |-
-      このテキストの要約を作ってください。日本語でお願いします。
-
-  kanso:
-    title: "感想を書いて"
-    query: |-
-      この文章を読んで、感想を書いてください。日本語でお願いします。
