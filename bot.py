@@ -74,8 +74,8 @@ def event_test(context, event, say, logger):
             logger.info("not thread")
             return
 
-        response = context.client.users_info(user=event["user"])
-        username = response["user"]["name"]
+        # response = context.client.users_info(user=event["user"])
+        # username = response["user"]["name"]
         blocks   = BlockKit().blocks(username="hoge")
         text     = config.behavior()["default"]
 
