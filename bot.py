@@ -81,19 +81,9 @@ def event_test(context, event, body, say, logger):
     elif command[0] == "help":
         thread_ts = event.get("thread_ts")
         say(text=Help().help_text(), thread_ts=thread_ts)
-    elif command[0] == "s":
-
-        thread_replies = context.client.conversations_replies(
-            channel=event['channel'],
-            ts=event['ts'],
-            limit=1000,
-        )
-
-        print(thread_replies)
-
-        with open("components/button.json", "r", encoding="utf8") as file:
-            block = json.load(file)
-        say(blocks=[block], text="Hey")
+    elif command[0] == "__debug":
+        import pdb
+        pdb.set_trace()
     else:
         if not event.get("thread_ts"):
             say(text=config.config['message']['not_thread'])
