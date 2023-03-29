@@ -50,7 +50,7 @@ def event_test(context, event, say, logger):
             logger.info("subcommand not found")
             return
 
-        say(text=config.behavior()["summarying"], thread_ts=thread_ts)
+        say(text="ちょっと待ってててね ...", thread_ts=thread_ts)
 
         channel_id  = event["channel"]
         thread_ts   = event["thread_ts"]
@@ -106,7 +106,10 @@ def handle_some_action(ack, context, body, say, logger):
     title = prompt["title"]
 
     # feedback message
-    say(text=config.behavior()["summarying"].format(user_id, title), thread_ts=thread_ts)
+    if user_id is not None:
+        say(text=config.behavior()["summarying"].format(user_id, title), thread_ts=thread_ts)
+    else:
+        say(text="ちょっと待ってててね ...", thread_ts=thread_ts)
 
     gpt     = SummaruGPT(bot_user_id=bot_user_id)
     summary = gpt.make_summary(channel_id=channel_id, thread_ts=thread_ts, query=query)

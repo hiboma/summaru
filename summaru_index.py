@@ -49,7 +49,12 @@ class SlackThreadReader:
 
                 for message in result['messages']:
                     # ignore message from summaru
-                    if message["user"] == self.bot_user_id:
+                    user = message.get("user")
+
+                    if user is None:
+                        continue
+
+                    if user == self.bot_user_id:
                        logger.info("summaru message is ignored: {}".format(message["text"]))
                        continue
 
