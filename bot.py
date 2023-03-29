@@ -76,7 +76,7 @@ def event_test(context, event, say, logger):
 
         response = context.client.users_info(user=event["user"])
         username = response["user"]["name"]
-        blocks   = BlockKit().blocks(username=username)
+        blocks   = BlockKit().blocks(username="hoge")
         text     = config.behavior()["default"]
 
         say(blocks=blocks, text=text, thread_ts=thread_ts)
