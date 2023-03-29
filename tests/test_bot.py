@@ -23,7 +23,8 @@ def test_config():
 
 def test_block_kit():
     block_kit = BlockKit()
-    assert block_kit.blocks(), 'block_kit.blocks()'
+    assert block_kit.blocks(username="testuser"), 'block_kit.blocks()'
+    assert block_kit.blocks(username="unknown"), 'block_kit.blocks()'
 
 def test_help_text():
     assert Help().help_text().find("help")

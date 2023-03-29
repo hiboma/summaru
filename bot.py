@@ -93,7 +93,12 @@ def event_test(context, event, body, say, logger):
             logger.info("not thread")
             return
 
-        say(blocks=BlockKit().blocks(), text=config.behavior()["default"], thread_ts=event['thread_ts'])
+        response = context.client.users_info(user=event["user"])
+        username = response["user"]["name"]
+        blocks   = BlockKit().blocks(username=username)
+        text     = config.behavior()["default"]
+
+        say(blocks=blocks, text=text, thread_ts=event['thread_ts'])
 
 @app.action("static_select-action")
 def handle_some_action(ack, context, body, say, logger):

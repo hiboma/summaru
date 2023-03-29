@@ -11,10 +11,18 @@
 				"type": "static_select",
 				"placeholder": {
 					"type": "plain_text",
-					"text": "Summary types",
+					"text": "Select an item",
 					"emoji": true
 				},
-				"options": [],
+				"option_groups": [
+					{
+						"label": {
+						"type": "plain_text",
+						"text": "shared prompts"
+					  },
+					  "options":[]
+					}
+				],
 				"action_id": "static_select-action"
 			}
 		}
