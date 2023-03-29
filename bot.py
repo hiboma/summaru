@@ -56,7 +56,7 @@ def event_test(context, event, body, say, logger):
     logger.info("text: {}".format(text))
     logger.info("command: {}".format(command))
 
-    if command[0] == "summary":
+    if command[0] == "prompt":
         if not event.get("thread_ts"):
             say(text=config.behavior()['not_thread'])
             return
@@ -65,7 +65,7 @@ def event_test(context, event, body, say, logger):
         if len(command) > 1:
             subcommand = command[1]
 
-        if config.prompts().get(subcommand) is None:
+        if config.shared_prompts().get(subcommand) is None:
             say(text=config.behavior()['subcommand_not_found'], thread_ts=event['thread_ts'])
             logger.info("subcommand not found")
             return
@@ -75,10 +75,10 @@ def event_test(context, event, body, say, logger):
         channel_id  = event["channel"]
         thread_ts   = event["thread_ts"]
         bot_user_id = context["bot_user_id"]
-        query       = config.behavior()[ subcommand ]["query"]
+        prompt      = config.shared_prompts()[ subcommand ]
 
-        gpt = SummaruGPT(bot_user_id=bot_user_id)
-        summary = gpt.make_summary(channel_id=channel_id, thread_ts=thread_ts, query=query)
+        gpt     = SummaruGPT(bot_user_id=bot_user_id)
+        summary = gpt.make_summary(channel_id=channel_id, thread_ts=thread_ts, query=prompt["query"])
 
         say(text=str(summary), thread_ts=event['thread_ts'])
     elif command[0] == "help":
@@ -109,9 +109,17 @@ def handle_some_action(ack, context, body, say, logger):
     thread_ts   = body["container"]["thread_ts"]
     bot_user_id = context["bot_user_id"]
 
+    # dict is deep ...
     selected_type = body["state"]["values"][ Config.BLOCK_ID ][ Config.ACTION_ID ]["selected_option"]["value"]
-    query = config.prompts()[selected_type]["query"]
-    title = config.prompts()[selected_type]["title"]
+
+    if re.match(r'\AUSER-', selected_type):
+        _, username, index = selected_type.split("-")
+        prompt = config.get_user_prompts(username, int(index))
+    else:
+        prompt = config.shared_prompts()[selected_type]
+
+    query = prompt["query"]
+    title = prompt["title"]
 
     say(text="<@{}> が `{}` を押したよ".format(body["user"]["id"], title), thread_ts=thread_ts)
     say(text=config.behavior()["summarying"], thread_ts=thread_ts)
@@ -131,9 +139,9 @@ class SummaruGPT:
         """
         SlackThreadReader でスレッドのデータを取得し、GPTSimpleVectorIndex で要約を行う
         """
-        documents = SlackThreadReader(bot_user_id=self.bot_user_id).load_data(channel_id=channel_id, thread_ts=thread_ts)
+        documents     = SlackThreadReader(bot_user_id=self.bot_user_id).load_data(channel_id=channel_id, thread_ts=thread_ts)
         llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
-        index = GPTSimpleVectorIndex(documents, llm_predictor=llm_predictor)
+        index    = GPTSimpleVectorIndex(documents, llm_predictor=llm_predictor)
         summary = index.query(query)
         return summary
 

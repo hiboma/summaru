@@ -23,8 +23,7 @@ class BlockKit:
         """
         shared prompts を追加します。
         """
-
-        for name, prompt in self.config.prompts().items():
+        for name, prompt in self.config.shared_prompts().items():
             self.block["blocks"][0]["accessory"]["option_groups"][0]["options"].append({
                 "text": {
                     "type": "plain_text",
@@ -37,13 +36,10 @@ class BlockKit:
         """
         user prompts を追加します。
         """
-
-        path = "prompts/{}.yaml".format(username)
-        if os.path.isfile(path) is False:
+        user_prompts = self.config.user_prompts()
+        prompts = user_prompts.get(username)
+        if prompts is None:
             return
-
-        with open(path, "r", encoding="utf8") as file:
-            user_prompt = yaml.safe_load(file)
 
         options_groups = {
             "label": {
@@ -53,13 +49,14 @@ class BlockKit:
             "options": [],
         }
 
-        for name, prompt in user_prompt["prompts"].items():
+        for i, prompt in enumerate(prompts):
+            print(prompt)
             options_groups["options"].append({
                 "text": {
                     "type": "plain_text",
                     "text": prompt["title"],
                 },
-                "value": name
+                "value": "USER-{}-{}".format(username, i)
             })
 
         self.block["blocks"][0]["accessory"]["option_groups"].append(options_groups)
@@ -71,6 +68,5 @@ class BlockKit:
         self.load_block()
         self.build_shared_prompts()
         self.build_user_prompts(username=username)
-
 
         return self.block["blocks"]

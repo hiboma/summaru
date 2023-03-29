@@ -21,7 +21,7 @@ class Help:
         help_text = self.config.behavior()["help"]
         help_text += "\n"
         help_text += "```"
-        for name, prompt in self.config.prompts().items():
+        for name, prompt in self.config.shared_prompts().items():
             help_text += "#{}\n".format(prompt["title"])
             help_text += "@summaru summary {}\n\n".format(name)
 

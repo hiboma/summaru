@@ -1,5 +1,5 @@
 ---
-prompts:
+shared_prompts:
   summary:
     title: "要約を書いて"
     query: |-
@@ -9,3 +9,13 @@ prompts:
     title: "感想を書いて"
     query: |-
       この文章を読んで、感想を書いてください。日本語でお願いします。
+
+user_prompts:
+  hito:
+    - title: "URL抜き出す"
+      query: |-
+        この文章から URL を抜き出してください。markdown のリスト形式で出力をお願いします。
+
+    - title: "感想を書いて"
+      query: |-
+        この文章を読んで、感想を書いてください。日本語でお願いします。

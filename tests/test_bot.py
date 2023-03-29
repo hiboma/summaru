@@ -19,7 +19,9 @@ def test_json():
 def test_config():
     config = Config()
     assert config.behavior(), 'config.behavior()'
-    assert config.prompts(), 'config.prompts()'
+    assert config.shared_prompts(), 'config.shared_prompts()'
+    assert config.user_prompts(), 'config.user_prompts()'
+    assert config.get_user_prompts("hito", 0), 'config.user_prompts()'
 
 def test_block_kit():
     block_kit = BlockKit()

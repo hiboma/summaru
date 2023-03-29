@@ -18,5 +18,11 @@ class Config:
     def behavior(self):
         return self._config.get("behavior")
 
-    def prompts(self):
-        return self._prompt.get("prompts")
+    def shared_prompts(self):
+        return self._prompt.get("shared_prompts")
+
+    def user_prompts(self):
+        return self._prompt.get("user_prompts")
+
+    def get_user_prompts(self, username: str, index: int):
+        return self._prompt.get("user_prompts")[username][index]
