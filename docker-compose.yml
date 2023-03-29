@@ -7,4 +7,5 @@ services:
       context: .
     volumes:
       - ./config.yaml:/app/config.yaml
+      - ./prompt.yaml:/app/prompt.yaml
     command: poetry run python bot.py

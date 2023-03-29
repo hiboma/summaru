@@ -37,5 +37,6 @@ COPY components       /app/components
 COPY tests            /app/tests
 COPY block_kit.py     /app/block_kit.py
 COPY help.py          /app/help.py
+COPY summaru_gpt.py   /app/summaru_gpt.py
 
 ENTRYPOINT ["poetry", "run"]
