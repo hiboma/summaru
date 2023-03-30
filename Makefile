@@ -7,6 +7,9 @@ test:
 run:
 	python bot.py
 
+dev/run:
+	jurigged --poll 1 -i bot.py
+
 watch:
 	ptw
 
